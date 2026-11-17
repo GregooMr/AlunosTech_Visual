@@ -1,0 +1,153 @@
+﻿@model IEnumerable<AlunosTech.Visual.Models.Matricula>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alunos Tech • Conteúdos Acadêmicos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+            body {
+                background-color: #f0f4f8;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            .ava-topbar {
+                background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            }
+
+            .ava-subnav {
+                background-color: #162d56;
+            }
+
+            .ava-banner {
+                background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
+            }
+
+            .course-card {
+                border: none;
+                border-radius: 12px;
+                transition: transform 0.2s, box-shadow 0.2s;
+            }
+
+                .course-card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0 10px 25px rgba(0, 114, 255, 0.15);
+                }
+
+            .section-header-ava {
+                background: linear-gradient(90deg, #1e3c72 0%, #2a5298 100%);
+                color: white;
+                font-weight: 700;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="ava-topbar text-white py-2 px-4 d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-person-badge-fill fs-4 text-info"></i>
+            <div>
+                <span class="fw-bold">@ViewBag.AlunoNome</span>
+                <span class="badge bg-light text-dark ms-2">RA: @ViewBag.AlunoRA</span>
+            </div>
+        </div>
+        <a asp-action="Sair" class="btn btn-outline-light btn-sm"><i class="bi bi-box-arrow-right me-1"></i>Sair</a>
+    </div>
+
+    <!-- Menu Superior Corrigido e Funcional -->
+    <nav class="ava-subnav navbar navbar-expand navbar-dark px-4 py-2 shadow-sm">
+        <ul class="navbar-nav gap-3 small fw-semibold text-uppercase">
+            <li class="nav-item"><a class="nav-link text-info" asp-action="Index">Conteúdos Acadêmicos</a></li>
+            <li class="nav-item"><a class="nav-link" asp-action="Bibliotecas">Bibliotecas</a></li>
+            <li class="nav-item"><a class="nav-link" asp-action="MuralDoAluno">Mural do Aluno</a></li>
+            <li class="nav-item"><a class="nav-link" asp-action="Tutoriais">Tutoriais</a></li>
+        </ul>
+    </nav>
+
+    <div class="ava-banner text-white py-4 text-center shadow-sm mb-4">
+        <h2 class="fw-bolder mb-0" style="letter-spacing: 2px;">ALUNOS TECH <span class="text-warning">• AVA</span></h2>
+        <small class="opacity-75">Portal de Ensino Digital Corporativo</small>
+    </div>
+
+    <div class="container pb-5">
+        @if (TempData["Aviso"] != null)
+        {
+            <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>@TempData["Aviso"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["Sucesso"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>@TempData["Sucesso"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold text-dark mb-0"><i class="bi bi-grid-fill text-primary me-2"></i>Meus Cursos em Andamento</h5>
+            <span class="badge bg-primary rounded-pill">@Model.Count() disciplinas</span>
+        </div>
+
+        <div class="row g-4 mb-5">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card course-card shadow-sm h-100">
+                        <div class="card-header bg-primary text-white py-3 rounded-top-3">
+                            <small class="opacity-75 d-block">Cód: @item.Curso?.Codigo</small>
+                            <h6 class="fw-bold mb-0 text-truncate">@item.Curso?.Titulo</h6>
+                        </div>
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div>
+                                <p class="text-muted small mb-2"><i class="bi bi-person-video3 me-1"></i>@item.Curso?.Professor</p>
+                                <p class="small text-secondary">@item.Curso?.Descricao</p>
+                            </div>
+                            <div class="mt-3">
+                                <div class="d-flex justify-content-between small fw-bold mb-1">
+                                    <span>Progresso</span>
+                                    <span class="text-primary">@item.ProgressoPercentual%</span>
+                                </div>
+                                <div class="progress mb-3" style="height: 8px;">
+                                    <div class="progress-bar bg-primary" style="width: @item.ProgressoPercentual%"></div>
+                                </div>
+                                <a asp-action="SalaDeAula" asp-route-id="@item.Id" class="btn btn-outline-primary w-100 fw-semibold">
+                                    <i class="bi bi-door-open me-1"></i>Acessar Disciplina
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Seção de Adicionar Nova Disciplina com bloqueio de duplicidade -->
+        <div class="card border-0 shadow-sm p-4">
+            <h5 class="fw-bold text-primary mb-3"><i class="bi bi-plus-circle-fill me-2"></i>Matricular em Nova Disciplina</h5>
+            <form asp-action="AdicionarCurso" method="post" class="row g-3 align-items-center">
+                <div class="col-md-9">
+                    <select name="cursoId" class="form-select form-select-lg fs-6" required>
+                        <option value="">Selecione uma disciplina disponível...</option>
+                        @foreach (var c in ViewBag.TodosCursos)
+                        {
+                            <option value="@c.Id">@c.Codigo - @c.Titulo</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary btn-lg w-100 fw-semibold">Efetuar Matrícula</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
