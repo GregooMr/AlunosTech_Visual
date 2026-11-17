@@ -5,7 +5,7 @@ GO
 USE AlunosTech_Legado;
 GO
 
--- Tabela de Alunos (Contém a falha proposital de senha em texto puro para análise crítica do PIM)
+-- Tabela de Alunos (Contém a falha de senha em texto puro para análise crítica do PIM)
 CREATE TABLE Alunos (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Nome VARCHAR(255) NOT NULL,

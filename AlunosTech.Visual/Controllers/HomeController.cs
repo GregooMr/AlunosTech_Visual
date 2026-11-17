@@ -131,7 +131,6 @@ public class HomeController : Controller
         return RedirectToAction(nameof(SalaDeAula), new { id = matriculaId });
     }
 
-    // Ações para os menus do topo funcionando
     public IActionResult Bibliotecas()
     {
         ViewBag.AlunoNome = HttpContext.Session.GetString("AlunoNome");
